@@ -1,0 +1,23 @@
+{
+    "name": "searsaw/drawbridge",
+    "description": "",
+    "authors": [
+        {
+            "name": "Alex Sears",
+            "email": "alexwsears@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Searsaw\\Drawbridge\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
