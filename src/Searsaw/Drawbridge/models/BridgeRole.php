@@ -2,14 +2,14 @@
 
 use Magniloquent\Magniloquent\Magniloquent;
 
-class Permission extends Magniloquent {
+class BridgeRole extends Magniloquent {
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'permissions';
+    protected $table = 'roles';
 
     /**
      * @var array The rules used to validate the model
@@ -27,8 +27,7 @@ class Permission extends Magniloquent {
      * @var array The relationships this model has to other models
      */
     protected static $relationships = array(
-        'users' => array('belongsToMany', 'User', 'users_permissions', 'permission_id', 'user_id'),
-        'roles' => array('belongstoMany', 'Role', 'permissions_roles', 'permission_id', 'user_id')
+        'permissions' => array('belongstoMany', 'Permission', 'permissions_roles', 'role_id', 'permission_id')
     );
 
 } 
