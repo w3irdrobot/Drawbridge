@@ -130,6 +130,9 @@ class BridgeUser extends Magniloquent {
      */
     public function addRoleByObject(BridgeRole $role_obj)
     {
+        if (! $role_obj->exists)
+            $role_obj->save();
+
         $role_id = $role_obj->getKey();
 
         return $this->addRoleById($role_id);

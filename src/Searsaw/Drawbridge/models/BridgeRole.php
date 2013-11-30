@@ -153,6 +153,9 @@ class BridgeRole extends Magniloquent {
      */
     public function addPermissionByObject(BridgePermission $permission_obj)
     {
+        if (! $permission_obj->exists)
+            $permission_obj->save();
+
         $permission_id = $permission_obj->getKey();
 
         return $this->addPermissionById($permission_id);
