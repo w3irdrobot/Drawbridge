@@ -16,10 +16,12 @@ class BridgeRole extends Magniloquent {
      */
     protected static $rules = array(
         'save'   => array(
-            'name' => 'required|min:3',
+            'name'         => 'required|min:3',
             'display_name' => 'required|min:3'
         ),
-        'create' => array(),
+        'create' => array(
+            'name' => 'unique:roles'
+        ),
         'update' => array()
     );
 
@@ -27,7 +29,7 @@ class BridgeRole extends Magniloquent {
      * @var array The relationships this model has to other models
      */
     protected static $relationships = array(
-        'users' => array('belongsToMany', 'User', 'users_roles', 'role_id', 'user_id'),
+        'users'       => array('belongsToMany', 'User', 'users_roles', 'role_id', 'user_id'),
         'permissions' => array('belongsToMany', 'Permission', 'roles_permissions', 'role_id', 'permission_id')
     );
 

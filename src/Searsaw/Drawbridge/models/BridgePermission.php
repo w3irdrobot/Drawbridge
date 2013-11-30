@@ -16,10 +16,12 @@ class BridgePermission extends Magniloquent {
      */
     protected static $rules = array(
         'save'   => array(
-            'name' => 'required|min:3',
+            'name'         => 'required|min:3',
             'display_name' => 'required|min:3'
         ),
-        'create' => array(),
+        'create' => array(
+            'name' => 'unique:permissions'
+        ),
         'update' => array()
     );
 
