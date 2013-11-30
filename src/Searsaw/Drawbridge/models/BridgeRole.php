@@ -161,4 +161,90 @@ class BridgeRole extends Magniloquent {
         return $this->addPermissionById($permission_id);
     }
 
+    /**
+     * Checks to see if a role has a certain permission
+     *
+     * @param $permission string|integer|\Searsaw\Drawbridge\Models\BridgePermission The permission to check
+     *
+     * @return bool
+     */
+    public function hasPermission($permission)
+    {
+        $permissions = $this->permissions;
+        foreach ($permissions as $permission_obj)
+            if ($this->checkPermission($permission, $permission_obj))
+                return true;
+
+        return false;
+    }
+
+    /**
+     * Checks to see if a given permission is equal to a permission the user already has
+     *
+     * @param $check string|integer|\Searsaw\Drawbridge\Models\BridgePermission The permission to check
+     * @param $has \Searsaw\Drawbridge\Models\BridgePermission The permission the user has to check against
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    public function checkPermission($check, BridgePermission $has)
+    {
+        if (is_string($check))
+            return $this->checkPermissionByName($check, $has);
+        elseif (is_numeric($check))
+            return $this->checkPermissionById($check, $has);
+        elseif ($check instanceof BridgePermission)
+            return $this->checkPermissionByObject($check, $has);
+        else
+            throw new \InvalidArgumentException('Permission to check must be a name, ID, or Permission object.');
+    }
+
+    /**
+     * Check to see if the string provided is the same as the name
+     * of the BridgePermission object passed in
+     *
+     * @param string $check The name to check
+     * @param BridgePermission $has The object to check against
+     *
+     * @return bool
+     */
+    public function checkPermissionByName($check, BridgePermission $has)
+    {
+        if ($check == $has->name)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Check to see if the number provided is the same as the ID
+     * of the BridgePermission object passed in
+     *
+     * @param string $check The ID to check
+     * @param BridgePermission $has The object to check against
+     *
+     * @return bool
+     */
+    public function checkPermissionById($check, BridgePermission $has)
+    {
+        if ($check == $has->id)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Check to see if the Permission provided is the same as the
+     * BridgePermission object passed in
+     *
+     * @param BridgePermission $check The object to check
+     * @param BridgePermission $has The object to check against
+     *
+     * @return bool
+     */
+    public function checkPermissionByObject(BridgePermission $check, BridgePermission $has)
+    {
+        return $this->checkPermissionById($check->id, $has);
+    }
+
 } 

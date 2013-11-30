@@ -80,7 +80,7 @@ class BridgeUser extends Magniloquent {
         elseif ($role instanceof BridgeRole)
             return $this->addRoleByObject($role);
         else
-            throw new \InvalidArgumentException('Role must be a name, ID, or Role object.');
+            throw new \InvalidArgumentException('Role to add must be a name, ID, or Role object.');
     }
 
     /**
@@ -136,6 +136,92 @@ class BridgeUser extends Magniloquent {
         $role_id = $role_obj->getKey();
 
         return $this->addRoleById($role_id);
+    }
+
+    /**
+     * Checks to see if a user has a certain role
+     *
+     * @param $role string|integer|\Searsaw\Drawbridge\Models\BridgeRole The role to check
+     *
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        $roles = $this->roles;
+        foreach ($roles as $role_obj)
+            if ($this->checkRole($role, $role_obj))
+                return true;
+
+        return false;
+    }
+
+    /**
+     * Checks to see if a given role is equal to a role the user already has
+     *
+     * @param $check string|integer|\Searsaw\Drawbridge\Models\BridgeRole The role to check
+     * @param $has \Searsaw\Drawbridge\Models\BridgeRole The role the user has to check against
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    public function checkRole($check, BridgeRole $has)
+    {
+        if (is_string($check))
+            return $this->checkRoleByName($check, $has);
+        elseif (is_numeric($check))
+            return $this->checkRoleById($check, $has);
+        elseif ($check instanceof BridgeRole)
+            return $this->checkRoleByObject($check, $has);
+        else
+            throw new \InvalidArgumentException('Role to check must be a name, ID, or Role object.');
+    }
+
+    /**
+     * Check to see if the string provided is the same as the name
+     * of the BridgeRole object passed in
+     *
+     * @param string $check The name to check
+     * @param BridgeRole $has The object to check against
+     *
+     * @return bool
+     */
+    public function checkRoleByName($check, BridgeRole $has)
+    {
+        if ($check == $has->name)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Check to see if the number provided is the same as the ID
+     * of the BridgeRole object passed in
+     *
+     * @param string $check The ID to check
+     * @param BridgeRole $has The object to check against
+     *
+     * @return bool
+     */
+    public function checkRoleById($check, BridgeRole $has)
+    {
+        if ($check == $has->id)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Check to see if the Role provided is the same as the
+     * BridgeRole object passed in
+     *
+     * @param BridgeRole $check The object to check
+     * @param BridgeRole $has The object to check against
+     *
+     * @return bool
+     */
+    public function checkRoleByObject(BridgeRole $check, BridgeRole $has)
+    {
+        return $this->checkRoleById($check->id, $has);
     }
 
 }
