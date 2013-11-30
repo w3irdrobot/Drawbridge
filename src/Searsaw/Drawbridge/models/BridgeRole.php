@@ -27,7 +27,8 @@ class BridgeRole extends Magniloquent {
      * @var array The relationships this model has to other models
      */
     protected static $relationships = array(
-        'permissions' => array('belongstoMany', 'Permission', 'permissions_roles', 'role_id', 'permission_id')
+        'users' => array('belongsToMany', 'User', 'users_roles', 'role_id', 'user_id'),
+        'permissions' => array('belongsToMany', 'Permission', 'roles_permissions', 'role_id', 'permission_id')
     );
 
 } 
