@@ -5,13 +5,6 @@ use Magniloquent\Magniloquent\Magniloquent;
 class BridgePermission extends Magniloquent {
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'permissions';
-
-    /**
      * @var array The rules used to validate the model
      */
     protected static $rules = array(
@@ -29,7 +22,14 @@ class BridgePermission extends Magniloquent {
      * @var array The relationships this model has to other models
      */
     protected static $relationships = array(
-        'roles' => array('belongstoMany', 'Role', 'roles_permissons', 'permission_id', 'role_id')
+        'roles' => array('belongsToMany', 'Role', 'roles_permissions', 'permission_id', 'role_id')
     );
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'permissions';
 
 } 

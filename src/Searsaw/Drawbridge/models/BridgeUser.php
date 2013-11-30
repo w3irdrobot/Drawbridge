@@ -1,7 +1,7 @@
 <?php namespace Searsaw\Drawbridge\Models;
 
 use Magniloquent\Magniloquent\Magniloquent;
-use \Searsaw\Drawbridge\Models\BridgeRole;
+use Searsaw\Drawbridge\Models\BridgeRole;
 
 class BridgeUser extends Magniloquent {
 
@@ -91,13 +91,13 @@ class BridgeUser extends Magniloquent {
     public function addRoleByName($role_name)
     {
         $role = static::$app['db']->connection()
-                                  ->table('roles')->where('name', '=', $role_name)->first();
+            ->table('roles')->where('name', '=', $role_name)->first();
 
         if (! $role)
             return new \RuntimeException('No role with that name found.');
 
         if (is_array($role))
-            return $this->roles()->attach($role['id']);
+            return $this->addRoleById($role['id']);
         elseif ($role instanceof BridgeRole)
             return $this->addRoleByObject($role);
         else
@@ -127,7 +127,7 @@ class BridgeUser extends Magniloquent {
     {
         $role_id = $role_obj->getKey();
 
-        return $this->roles()->attach($role_id);
+        return $this->addRoleById($role_id);
     }
 
 }
