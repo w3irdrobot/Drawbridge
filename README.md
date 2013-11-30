@@ -18,7 +18,7 @@ Update your application packages with `composer update` or install them with `co
 
 ##Getting Started
 
-For the roles and permissions to work, a Role model, and Permission model, and a User model need to exist.  Luckily, Drawbridge ships with three models you can easily extend to add the functionality to your models.  In your `app/models` directory, create the following two models.
+For the roles and permissions to work, a Role model, a Permission model, and a User model need to exist.  Luckily, Drawbridge ships with three models you can easily extend to add the functionality to your models.  In your `app/models` directory, create the following two models.
 
 ```php
 use Searsaw\Drawbridge\Models\BridgeRole;
@@ -44,7 +44,7 @@ class User extends BridgeUser implements UserInterface, RemindableInterface {
 ...
 ```
 
-All three models extends Magniloquent, a model validation package for Laravel models.  Magniloquent extends Eloquent, giving your models all the functionality of Eloquent with the added benefit of model validation.  For more information on Magniloquent, [visit its Github page](https://github.com/philipbrown/magniloquent).
+All three models extend Magniloquent, a model validation package for Laravel models.  Magniloquent extends Eloquent, giving your models all the functionality of Eloquent with the added benefit of model validation.  For more information on Magniloquent, [visit its Github page](https://github.com/philipbrown/magniloquent).
 
 ## Adding Roles and Permissions
 
@@ -84,6 +84,8 @@ $admin->addPermission([$edit->id, 'can_view']);
 ##Checking for roles or permissions
 
 Coming soon...
+
+##License
 
 The MIT License (MIT)
 
