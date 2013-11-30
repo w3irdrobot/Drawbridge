@@ -59,7 +59,7 @@ class BridgeUser extends Magniloquent {
     public function addMultipleRoles($roles)
     {
         foreach ($roles as $role)
-            return $this->addSingleRole($role);
+            $this->addSingleRole($role);
     }
 
     /**
@@ -67,7 +67,9 @@ class BridgeUser extends Magniloquent {
      *
      * @param $role string|integer|\Searsaw\Drawbridge\Models\BridgeRole
      *
-     * @return \Searsaw\Drawbridge\Models\BridgeRole|\InvalidArgumentException
+     * @throws \InvalidArgumentException
+     *
+     * @return \Searsaw\Drawbridge\Models\BridgeRole
      */
     public function addSingleRole($role)
     {
@@ -78,7 +80,7 @@ class BridgeUser extends Magniloquent {
         elseif ($role instanceof BridgeRole)
             return $this->addRoleByObject($role);
         else
-            return new \InvalidArgumentException('Role must be a name, ID, or Role object.');
+            throw new \InvalidArgumentException('Role must be a name, ID, or Role object.');
     }
 
     /**
@@ -86,7 +88,10 @@ class BridgeUser extends Magniloquent {
      *
      * @param $role_name string The name of the role to add
      *
-     * @return \Searsaw\Drawbridge\Models\BridgeRole|\RuntimeException|\UnexpectedValueException
+     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
+     *
+     * @return \Searsaw\Drawbridge\Models\BridgeRole
      */
     public function addRoleByName($role_name)
     {
@@ -94,14 +99,14 @@ class BridgeUser extends Magniloquent {
             ->table('roles')->where('name', '=', $role_name)->first();
 
         if (! $role)
-            return new \RuntimeException('No role with that name found.');
+            throw new \RuntimeException('No role with that name found.');
 
         if (is_array($role))
             return $this->addRoleById($role['id']);
-        elseif ($role instanceof BridgeRole)
-            return $this->addRoleByObject($role);
+        elseif (is_object($role))
+            return $this->addRoleById($role->id);
         else
-            return new \UnexpectedValueException('Value returned not array or instance of BridgeRole.');
+            throw new \UnexpectedValueException('Value returned not array or instance of BridgeRole.');
     }
 
     /**

@@ -39,7 +39,7 @@ class BridgeRole extends Magniloquent {
      *
      * @var string
      */
-    protected $table = 'permissions';
+    protected $table = 'roles';
 
     /**
      * The constructor of the model. Takes optional array of attributes.
@@ -82,7 +82,7 @@ class BridgeRole extends Magniloquent {
     public function addMultiplePermissions($permissions)
     {
         foreach ($permissions as $permission)
-            return $this->addSinglePermission($permission);
+            $this->addSinglePermission($permission);
     }
 
     /**
@@ -90,7 +90,9 @@ class BridgeRole extends Magniloquent {
      *
      * @param $permission string|integer|\Searsaw\Drawbridge\Models\BridgePermission
      *
-     * @return \Searsaw\Drawbridge\Models\BridgePermission|\InvalidArgumentException
+     * @throws \InvalidArgumentException
+     *
+     * @return \Searsaw\Drawbridge\Models\BridgePermission
      */
     public function addSinglePermission($permission)
     {
@@ -101,7 +103,7 @@ class BridgeRole extends Magniloquent {
         elseif ($permission instanceof BridgePermission)
             return $this->addPermissionByObject($permission);
         else
-            return new \InvalidArgumentException('Permission must be a name, ID, or Permission object.');
+            throw new \InvalidArgumentException('Permission must be a name, ID, or Permission object.');
     }
 
     /**
@@ -109,7 +111,10 @@ class BridgeRole extends Magniloquent {
      *
      * @param $permission_name string The name of the permission to add
      *
-     * @return \Searsaw\Drawbridge\Models\BridgePermission|\RuntimeException|\UnexpectedValueException
+     * @throws \UnexpectedValueException
+     * @throws \RuntimeException
+     *
+     * @return \Searsaw\Drawbridge\Models\BridgePermission
      */
     public function addPermissionByName($permission_name)
     {
@@ -121,10 +126,10 @@ class BridgeRole extends Magniloquent {
 
         if (is_array($permission))
             return $this->addPermissionById($permission['id']);
-        elseif ($permission instanceof BridgePermission)
-            return $this->addPermissionByObject($permission);
+        elseif (is_object($permission))
+            return $this->addPermissionById($permission->id);
         else
-            return new \UnexpectedValueException('Value returned not array or instance of BridgePermission.');
+            throw new \UnexpectedValueException('Value returned not array or instance of BridgePermission.');
     }
 
     /**
