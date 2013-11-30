@@ -1,6 +1,9 @@
 {
     "name": "searsaw/drawbridge",
     "description": "Roles and permissions for Laravel 4.",
+    "keywords": ["laravel", "roles", "permissions", "magniloquent"],
+    "homepage": "https://github.com/searsaw/Drawbridge",
+    "license": "MIT",
     "authors": [
         {
             "name": "Alex Sears",
