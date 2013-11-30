@@ -2,6 +2,89 @@ Drawbridge
 ===========
 Roles and permissions for Laravel 4.
 
+##Installation
+
+Add `searsaw/drawbridge` as a requirement to your `composer.json`.
+
+```json
+{
+  "require": {
+    "searsaw/drawbridge": "dev-master"
+  }
+}
+```
+
+Update your application packages with `composer update` or install them with `composer install`.
+
+##Getting Started
+
+For the roles and permissions to work, a Role model, and Permission model, and a User model need to exist.  Luckily, Drawbridge ships with three models you can easily extend to add the functionality to your models.  In your `app/models` directory, create the following two models.
+
+```php
+use Searsaw\Drawbridge\Models\BridgeRole;
+
+class Role extends BridgeRole {}
+```
+
+```php
+use Searsaw\Drawbridge\Models\BridgePermission;
+
+class Permission extends BridgePermission {}
+```
+
+There is also a BridgeUser model included in the package to give the functionality for adding roles to your User model.  The below code adds the BridgeUser model functionality to the default User model that comes with Laravel.
+
+```php
+use Illuminate\Auth\UserInterface;
+use Illuminate\Auth\Reminders\RemindableInterface;
+use Searsaw\Drawbridge\Models\BridgeUser;
+
+class User extends BridgeUser implements UserInterface, RemindableInterface {
+
+...
+```
+
+All three models extends Magniloquent, a model validation package for Laravel models.  Magniloquent extends Eloquent, giving your models all the functionality of Eloquent with the added benefit of model validation.  For more information on Magniloquent, [visit its Github page](https://github.com/philipbrown/magniloquent).
+
+## Adding Roles and Permissions
+
+Roles are groups of permissions.  Users can have different roles, giving them extended abilities depending on the roles they have.
+
+To add roles to a user, use the `addRole` method on a user object.  This method can take a role ID, a role name, or a role object.  If the role object has not yet been saved to the database, it will be saved before being attached to the user.  This method can also take an array of any combination of the previous three.
+
+To add permissions to a role, use the `addPermission` method on a role object.  This method works exactly as the `addRole` method mentioned above.  This makes adding permissions as easy as possible.
+
+```php
+$user = User::find(1);
+
+$admin = new Role;
+$admin->name = 'admin';
+$admin->display_name = 'Admin';
+$admin->save();
+
+$author = new Role;
+$author->name = 'author';
+$author->display_name = 'Author';
+
+$edit = new Permission;
+$edit->name = 'can_edit';
+$edit->display_name = 'Can Edit';
+$edit->save();
+
+$view = new Permission;
+$view->name = 'can_view';
+$view->display_name = 'Can View';
+$view->save();
+
+$user->addRole([$admin, $author]);
+
+$admin->addPermission([$edit->id, 'can_view']);
+```
+
+##Checking for roles or permissions
+
+Coming soon...
+
 The MIT License (MIT)
 
 Copyright (c) 2013 Alex Sears
