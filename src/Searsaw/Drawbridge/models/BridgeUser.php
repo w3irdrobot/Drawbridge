@@ -2,6 +2,7 @@
 
 use Magniloquent\Magniloquent\Magniloquent;
 use Searsaw\Drawbridge\Models\BridgeRole;
+use Searsaw\Drawbridge\Models\BridgePermission;
 
 class BridgeUser extends Magniloquent {
 
@@ -80,7 +81,7 @@ class BridgeUser extends Magniloquent {
         elseif ($role instanceof BridgeRole)
             return $this->addRoleByObject($role);
         else
-            throw new \InvalidArgumentException('Role to add must be a name, ID, or Role object.');
+            throw new \InvalidArgumentException('Role must be a name, ID, or Role object.');
     }
 
     /**
@@ -159,7 +160,7 @@ class BridgeUser extends Magniloquent {
      * Checks to see if a given role is equal to a role the user already has
      *
      * @param $check string|integer|\Searsaw\Drawbridge\Models\BridgeRole The role to check
-     * @param $has \Searsaw\Drawbridge\Models\BridgeRole The role the user has to check against
+     * @param $has   \Searsaw\Drawbridge\Models\BridgeRole The role the user has to check against
      *
      * @return mixed
      * @throws \InvalidArgumentException
@@ -180,8 +181,8 @@ class BridgeUser extends Magniloquent {
      * Check to see if the string provided is the same as the name
      * of the BridgeRole object passed in
      *
-     * @param string $check The name to check
-     * @param BridgeRole $has The object to check against
+     * @param string     $check The name to check
+     * @param BridgeRole $has   The object to check against
      *
      * @return bool
      */
@@ -197,8 +198,8 @@ class BridgeUser extends Magniloquent {
      * Check to see if the number provided is the same as the ID
      * of the BridgeRole object passed in
      *
-     * @param string $check The ID to check
-     * @param BridgeRole $has The object to check against
+     * @param string     $check The ID to check
+     * @param BridgeRole $has   The object to check against
      *
      * @return bool
      */
@@ -215,13 +216,84 @@ class BridgeUser extends Magniloquent {
      * BridgeRole object passed in
      *
      * @param BridgeRole $check The object to check
-     * @param BridgeRole $has The object to check against
+     * @param BridgeRole $has   The object to check against
      *
      * @return bool
      */
     public function checkRoleByObject(BridgeRole $check, BridgeRole $has)
     {
         return $this->checkRoleById($check->id, $has);
+    }
+
+    /**
+     * Check to see if the user has the given permission.  Permission
+     * can be an ID, name, or Permission object
+     *
+     * @param $permission integer|string|\Searsaw\Drawbridge\Models\BridgePermission The permission to check for
+     *
+     * @return bool
+     */
+    public function hasPermission($permission)
+    {
+        $perm_id = $this->getPermissionId($permission);
+        $roles = $this->getRolesWithPermission($perm_id);
+
+        foreach ($roles as $role)
+            if ($this->hasRole($role))
+                return true;
+
+        return false;
+    }
+
+    /**
+     * Get the ID of the passed in permission.  Permission
+     * can be an ID, name, or Permission object
+     *
+     * @param $permission integer|string|\Searsaw\Drawbridge\Models\BridgePermission The permission whose ID to get
+     *
+     * @return integer
+     * @throws \InvalidArgumentException
+     */
+    public function getPermissionId($permission)
+    {
+        if (is_numeric($permission))
+            return $permission;
+        elseif (is_string($permission))
+            return $this->getPermissionIdFromName($permission);
+        elseif ($permission instanceof BridgePermission)
+            return $permission->id;
+        else
+            throw new \InvalidArgumentException('Permission to check must be a name, ID, or Permission object.');
+    }
+
+    /**
+     * Get the ID of a permission with the passed in name
+     *
+     * @param $perm_name string The name of the permission whose ID to get
+     *
+     * @return integer
+     */
+    public function getPermissionIdFromName($perm_name)
+    {
+        $permission = static::$app['db']->connection()
+            ->table('permissions')->where('name', '=', $perm_name)->first();
+
+        return $permission->id;
+    }
+
+    /**
+     * Get the roles who have the given permission
+     *
+     * @param $perm_id integer The ID of the permission
+     *
+     * @return integer
+     */
+    public function getRolesWithPermission($perm_id)
+    {
+        $roles = static::$app['db']->connection()
+            ->table('roles_permissions')->where('permission_id', '=', $perm_id)->lists('role_id');
+
+        return $roles;
     }
 
 }
