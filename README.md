@@ -83,9 +83,11 @@ $admin->addPermission([$edit->id, 'can_view']);
 
 ##Checking for roles or permissions
 
-To check if a user has a certain role, use the `hasRole` method on a user object.  It can take an ID, a name, or a Role object itself.  It returns a `true` if the user has the role or `false` if the user does not.
+To check if a user has a certain role, use the `hasRole` method on a user object.  It can take an ID, a name, or a Role object itself.  It returns `true` if the user has the role or `false` if the user does not.
 
-To check if a role has a certain permission, use the `hasPermission` method on a role object.  It can take an ID, a name, or a Permission object itself.  It returns a `true` if the role has the permission or `false` if the role does not.
+To check if a role has a certain permission, use the `hasPermission` method on a role object.  It can take an ID, a name, or a Permission object itself.  It returns `true` if the role has the permission or `false` if the role does not.
+
+You can also check to see if a user has a particular permission by using the the `hasPermission` method on a user object.  It can take an ID, a name, or a Permission object itself.  It returns `true` if the user has the permission or `false` if the user does not.
 
 ```php
 $user = User::find(1);
@@ -99,6 +101,10 @@ $user->hasRole(2);
 $admin->hasPermission('can_edit');
 $admin->hasPermission($edit);
 $admin->hasPermission(1);
+
+$user->hasPermission('can_edit');
+$user->hasPermission($edit);
+$user->hasPermission(1);
 ```
 
 ##License
