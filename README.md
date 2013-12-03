@@ -14,9 +14,21 @@ Add `searsaw/drawbridge` as a requirement to your `composer.json`.
 }
 ```
 
-Update your application packages with `composer update` or install them with `composer install`.
+Update your application packages with `composer update` or install them with `composer install`.  Then add the service provider to `providers` array in the `app/config/app.php` file.
+
+```php
+'providers' => array(
+    'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+    'Illuminate\Auth\AuthServiceProvider',
+    ...
+    'Illuminate\Workbench\WorkbenchServiceProvider',
+    'Searsaw\Drawbridge\DrawbridgeServiceProvider'
+),
+```
 
 ##Getting Started
+
+First, we need to export the migrations into the `migrations` directory so the tables for Drawbridge can be put into the database. Run the `php artisan drawbridge:migrations` command to export them.  Then migrate the database with `php artisan migrate`.
 
 For the roles and permissions to work, a Role model, a Permission model, and a User model need to exist.  Luckily, Drawbridge ships with three models you can easily extend to add the functionality to your models.  In your `app/models` directory, create the following two models.
 
