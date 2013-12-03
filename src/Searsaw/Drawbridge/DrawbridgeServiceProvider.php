@@ -1,6 +1,7 @@
 <?php namespace Searsaw\Drawbridge;
 
 use Illuminate\Support\ServiceProvider;
+use Searsaw\Drawbridge\Commands\MigrationsCommand;
 
 class DrawbridgeServiceProvider extends ServiceProvider {
 
@@ -28,17 +29,24 @@ class DrawbridgeServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->registerCommands();
 	}
 
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
-	public function provides()
-	{
-		return array();
-	}
+    /**
+     * Register the commands
+     */
+    private function registerCommands()
+    {
+        $this->app['commands.drawbridge.migrations'] = $this->app->share(function($app)
+        {
+            return new MigrationsCommand($app);
+        });
+
+        $this->commands(
+            [
+            'commands.drawbridge.migrations'
+            ]
+        );
+    }
 
 }
