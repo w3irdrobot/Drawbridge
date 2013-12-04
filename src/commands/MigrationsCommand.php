@@ -39,6 +39,7 @@ class MigrationsCommand extends Command {
 
         if ($this->createMigration())
         {
+            $this->call('dump-autoload');
             $this->call('optimize');
             $this->info('Migration created! Enjoy.');
         }
