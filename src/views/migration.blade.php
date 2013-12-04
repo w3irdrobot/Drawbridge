@@ -54,6 +54,18 @@ class DrawbridgeMigrationsTables extends Migration {
      */
     public function down()
     {
+        Schema::table('roles_permissions', function(Blueprint $table)
+        {
+            $table->dropForeign('roles_permissions_role_id_foreign');
+            $table->dropForeign('roles_permissions_permission_id_foreign');
+        });
+
+        Schema::table('users_roles', function(Blueprint $table)
+        {
+            $table->dropForeign('users_roles_user_id_foreign');
+            $table->dropForeign('users_roles_role_id_foreign');
+        });
+
         Schema::drop('permissions');
         Schema::drop('roles');
         Schema::drop('users_roles');
