@@ -38,9 +38,14 @@ class MigrationsCommand extends Command {
         $this->info('Creating migration in app/database/migrations...');
 
         if ($this->createMigration())
+        {
+            $this->call('optimize');
             $this->info('Migration created! Enjoy.');
+        }
         else
+        {
             $this->error('Could not create the migration.  Make sure we have write permissions for this directory and the file doesn\'t already exist.');
+        }
 	}
 
     /**
