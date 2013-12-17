@@ -77,6 +77,7 @@ $admin->save();
 $author = new Role;
 $author->name = 'author';
 $author->display_name = 'Author';
+$author->save();
 
 $edit = new Permission;
 $edit->name = 'can_edit';
