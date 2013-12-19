@@ -43,9 +43,9 @@ class DrawbridgeServiceProvider extends ServiceProvider {
         });
 
         $this->commands(
-            [
-            'commands.drawbridge.migrations'
-            ]
+            array(
+                 'commands.drawbridge.migrations'
+            )
         );
     }
 
