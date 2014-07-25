@@ -293,6 +293,8 @@ class BridgeUser extends Magniloquent {
         $roles = static::$app['db']->connection()
             ->table('roles_permissions')->where('permission_id', '=', $perm_id)->lists('role_id');
 
+        $roles = array_map('intval', $roles);
+
         return $roles;
     }
 
