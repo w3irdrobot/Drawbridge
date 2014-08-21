@@ -1,5 +1,8 @@
 Drawbridge
 ===========
+
+*This repo is no longer being maintained.  Since Laravel now requires PHP 5.4, using Laravel allows you to use traits.  The [Entrust](https://github.com/Zizaco/entrust) package already supports this and has a much bigger community.  I recommend the use of it instead.*
+
 Roles and permissions for Laravel 4.
 
 ##Installation
